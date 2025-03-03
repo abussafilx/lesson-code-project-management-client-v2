@@ -10,10 +10,13 @@ function EditProjectPage(props) {
   
   const { projectId } = useParams();
   const navigate = useNavigate();
+
+  const storedToken = localStorage.getItem('authToken');
   
   useEffect(() => {
     axios
-      .get(`${API_URL}/api/projects/${projectId}`)
+      .get(`${API_URL}/api/projects/${projectId}`, requestBody,
+        { headers: { Authorization: `Bearer ${storedToken}` } })
       .then((response) => {
         const oneProject = response.data;
         setTitle(oneProject.title);
@@ -29,7 +32,8 @@ function EditProjectPage(props) {
     const requestBody = { title, description };
 
     axios
-      .put(`${API_URL}/api/projects/${projectId}`, requestBody)
+      .put(`${API_URL}/api/projects/${projectId}`, requestBody, requestBody,
+        { headers: { Authorization: `Bearer ${storedToken}` } })
       .then((response) => {
         navigate(`/projects/${projectId}`)
       });
@@ -39,7 +43,8 @@ function EditProjectPage(props) {
   const deleteProject = () => {
     
     axios
-      .delete(`${API_URL}/api/projects/${projectId}`)
+      .delete(`${API_URL}/api/projects/${projectId}`, requestBody,
+        { headers: { Authorization: `Bearer ${storedToken}` } })
       .then(() => {
         navigate("/projects");
       })
